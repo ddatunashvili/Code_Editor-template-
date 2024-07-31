@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco Editor Example</title>
+    <style>
+        #container {
+            height: 500px;
+            width: 100%;
+        }
+        .controls {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <label for="theme">Select Theme:</label>
+        <select id="theme">
+            <option value="vs-dark">Dark</option>
+            <option value="vs-light">Light</option>
+            <option value="hc-black">High Contrast</option>
+        </select>
+        
+        <label for="language">Select Language:</label>
+        <select id="language">
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="cpp">C++</option>
+        </select>
+    </div>
+    <div id="container"></div>
+
+    <!-- Load RequireJS -->
+    <script src="ajax.js"></script>
+    
+    <!-- Configure RequireJS and Load Monaco Editor -->
+    <script >
+        require.config({
+            paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' },
+            waitSeconds: 60 // Increase the timeout to 60 seconds
+        });
+
+        require(['vs/editor/editor.main'], function() {
+            var editor = monaco.editor.create(document.getElementById('container'), {
+                value: `function helloMonaco() {
+    console.log("Hello, Monaco Editor!");
+}`,
+                language: 'python',
+                theme: 'vs-dark'
+            });
+
+            // Function to change theme
+            document.getElementById('theme').addEventListener('change', function() {
+                var newTheme = this.value;
+                monaco.editor.setTheme(newTheme);
+            });
+
+            // Function to change language
+            document.getElementById('language').addEventListener('change', function() {
+                var newLanguage = this.value;
+                monaco.editor.setModelLanguage(editor.getModel(), newLanguage.toLowerCase());
+            });
+        });
+    </script>
+</body>
+</html>
